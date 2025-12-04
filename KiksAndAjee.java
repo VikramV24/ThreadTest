@@ -58,9 +58,21 @@ public class KiksAndAjee {
         // Start timer
         long startTime = System.currentTimeMillis();
 
-        // *** SINGLE-THREADED PROCESSING ***
-        processFile(file1In, file1Out);
-        processFile(file2In, file2Out);
+        // NEW: Create threads for each file-processing task
+        Thread t1 = new Thread(() -> processFile(file1In, file1Out)); // NEW
+        Thread t2 = new Thread(() -> processFile(file2In, file2Out)); // NEW
+
+        // NEW: Start both threads
+        t1.start();
+        t2.start();
+
+        // NEW: Wait for both threads to finish (join)
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // End timer
         long endTime = System.currentTimeMillis();
